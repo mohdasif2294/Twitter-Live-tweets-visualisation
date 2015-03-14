@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >  
+<meta charset="UTF-8" > 
+<head>
+	<title>Twitter Top Locations::Set Duration</title>
+	<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	<style type="text/css">
+	body{
+		background-color: #26C281;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+	<div class="row" style="text-align:center;margin-top:8%"><h1 style="font-size:50px">Twitter Top Locations</h1></div>
+		<div class="row" style="margin-top:5%">
+			<div class="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2" style="text-align:center;font-size:16px">
+				<form class="time_dur" method="post" action="twitmap">
+				{% csrf_token %}
+					Time Duration:&nbsp;&nbsp;&nbsp;<input type="number" name="duration" min="1" max="60" required>
+					&nbsp;&nbsp;&nbsp;<input type="submit" value="Submit">
+				</form>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>

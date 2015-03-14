@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Tweets Live Map</title>
+
+<script src="d3.min.js"></script>
+<script src="js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<style>
+  .graticule {
+    fill: none;
+    stroke: #333;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+  }
+
+  .land {
+    fill: #383838;
+  }
+
+  .boundary {
+    fill: none;
+    stroke: #F9690E;
+    stroke-width: .65px;
+  }
+  .map_area{
+    background-color: #C5EFF7;
+  }
+
+  .bubble {
+  fill-opacity: .5;
+  stroke: #F1A9A0;
+  stroke-width: 0.5px;
+}
+  body{
+  }
+</style>
+
+<body>
+  <div class="container-fluid" style="text-align:center;">
+    <div class="row">
+      <h3>Tweet Live Map</h3> 
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-9" style="text-align:right">
+        <a href="setduration.html">Click here</a> to set a new time Interval.
+      </div>
+    </div>
+    <div class="row map_area">
+      <div class="map">
+      </div>
+    </div>
+  </div>
+  <script>
+
+    var width = 1280,
+    height = 570;
+
+    var projection = d3.geo.patterson()
+    .scale(195)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+    var path = d3.geo.path()
+    .projection(projection);
+
+    var graticule = d3.geo.graticule();
+
+    var svg = d3.select(".map").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+    svg.append("path")
+    .datum(graticule)
+    //.attr("class", "graticule")
+    .attr("d", path);
+
+    var g = svg.append("g");
+
+    d3.json("world-110m.json", function(error, world) {
+      svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+      svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+
+          aa = [78,65];
+          bb = [90.389809, 38.72728];
+          cc = [92.389809, 38.72728];
+          dd = [94.389809, 38.72728];
+          console.log(projection(aa),projection(bb));
+
+     svg.selectAll("circle")
+    .data([aa,bb,cc,dd]).enter()
+    .append("circle")
+    .attr("class", "bubble")
+    .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+    .attr("cy", function (d) { return projection(d)[1]; })
+    .attr("r", "8px")
+    .style("fill", " #FF1C00")
+    .style("fill-opacity","0.5")
+
+    });
+
+    d3.select(self.frameElement).style("height", height + "px");
+
+  </script>
+</body>
